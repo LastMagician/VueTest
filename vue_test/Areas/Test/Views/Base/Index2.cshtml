@@ -1,0 +1,99 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>计算属性</title>
+    <style>
+        .font-size {
+            font-size: 30px;
+        }
+
+        .font-color {
+            color: red;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="example">
+        <h2>计算属性</h2>
+        <h3>计算属性1</h3>
+        <div>
+            a={{a}},b={{b}}
+        </div>
+
+        <h3>计算属性2</h3>
+        <div>
+            {{fullName}}
+        </div>
+
+        <h3>计算属性3</h3>
+        <div>
+            {{fullName1}}
+        </div>
+
+
+        <h2>Class与style绑定</h2>
+        <h3>数组语法</h3>
+        <div v-bind:class="['font-size', { 'font-bold': isC, 'font-color': isB }]">这是数组语法</div>
+
+        <h3>绑定内联样式</h3>
+        <div v-bind:style="[styleObject1, styleObject2]">绑定内联样式</div>
+    </div>
+
+    <div></div>
+
+    <script src="~/Scripts/vue/2.x/vue.js"></script>
+    <script>
+        "use strict"
+        var data = {
+            a: 1,
+            fullName: '',
+            firstName: 'Foo',
+            lastName: 'Bar',
+            isA: true,
+            isB: false,
+            isC: true,
+            styleObject1: {
+                color: 'red',
+                fontSize: '20px'
+            },
+            styleObject2: {
+                fontWeight: 'bold'
+            }
+
+        }
+
+        var vm = new Vue({
+            el: "#example",
+            data: data,
+            computed: {
+                b: function () {
+                    return this.a + 1
+                },
+                fullName: function () {
+                    return this.firstName + " " + this.lastName;
+                },
+                fullName1: {
+                    get: function () {
+                        return this.firstName + ' ' + this.lastName;
+                    },
+                    set: function (newVulue) {
+                        var names = newVulue.split(' ');
+                        this.firstName = names[0];
+                        this.lastName = name[names.length - 1];
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

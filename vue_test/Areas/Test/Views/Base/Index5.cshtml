@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>事件</title>
+</head>
+<body>
+    <div>
+        <div id="example1">
+            <button v-on:click="counter += 1">增加</button>
+            <p>这个按钮被点击了{{counter}}次</p>
+
+            <button v-on:click="say('hi')">Say hi</button>
+
+            <h3>访问原生事件</h3>
+            <input type="file" v-on:click="warn('Input cannot be selected yet.', $event)"/>
+
+            <h3>事件修饰符</h3>
+
+            <form action="http://cn.bing.com">
+                <button type="submit">提交</button>
+            </form>
+        </div>
+    </div>
+    <script src="~/Scripts/vue/2.x/vue.js"></script>
+    <script>
+        "use strict"
+
+        ; (function () {
+            new Vue({
+                el: '#example1',
+                data: {
+                    counter: 0
+                },
+                methods: {
+                    say: function (message) {
+                        alert(message);
+                    },
+                    warn: function (message, event) {
+                        if (event) event.preventDefault();
+                        alert(message);
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
