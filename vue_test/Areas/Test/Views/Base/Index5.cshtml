@@ -1,53 +1,51 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Areas/Test/Views/Shared/_LayoutVueMain.cshtml";
+    ViewBag.Title="事件";
 }
+<div>
+    <div id="example1">
+        <button v-on:click="counter += 1">增加</button>
+        <p>这个按钮被点击了{{counter}}次</p>
 
-<!DOCTYPE html>
+        <button v-on:click="say('hi')">Say hi</button>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>事件</title>
-</head>
-<body>
-    <div>
-        <div id="example1">
-            <button v-on:click="counter += 1">增加</button>
-            <p>这个按钮被点击了{{counter}}次</p>
+        <h3>访问原生事件</h3>
+        <input type="file" v-on:click="warn('Input cannot be selected yet.', $event)" />
 
-            <button v-on:click="say('hi')">Say hi</button>
+        <h3>事件修饰符(有问题)</h3>
 
-            <h3>访问原生事件</h3>
-            <input type="file" v-on:click="warn('Input cannot be selected yet.', $event)"/>
+        <form action="http://cn.bing.com">
+            <button v-on:submit.stop="submut('press enter')">提交</button>
+        </form>
 
-            <h3>事件修饰符</h3>
-
-            <form action="http://cn.bing.com">
-                <button type="submit">提交</button>
-            </form>
-        </div>
+        <h3>按键修饰符</h3>
+        <input v-on:keyup.enter="submit('press enter')" />
+        <input v-on:keyup.f1="submit('press f2')" />
     </div>
-    <script src="~/Scripts/vue/2.x/vue.js"></script>
-    <script>
-        "use strict"
+</div>
 
-        ; (function () {
-            new Vue({
-                el: '#example1',
-                data: {
-                    counter: 0
+<script>
+    "use strict"
+
+    ; (function () {
+        Vue.config.keyCodes.f1 = 113;
+        new Vue({
+            el: '#example1',
+            data: {
+                counter: 0
+            },
+            methods: {
+                say: function (message) {
+                    alert(message);
                 },
-                methods: {
-                    say: function (message) {
-                        alert(message);
-                    },
-                    warn: function (message, event) {
-                        if (event) event.preventDefault();
-                        alert(message);
-                    }
+                warn: function (message, event) {
+                    if (event) event.preventDefault();
+                    alert(message);
+                },
+                submit: function (message) {
+                    alert(message);
                 }
-            });
-        })();
-    </script>
-</body>
-</html>
+            }
+        });
+    })();
+</script>
