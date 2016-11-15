@@ -57,10 +57,19 @@ namespace vue_test.Areas.Test.Controllers
         }
 
         /// <summary>
-        /// 组件
+        /// 组件1
         /// </summary>
         /// <returns></returns>
         public ActionResult Index6()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 组件2
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index7()
         {
             return View();
         }

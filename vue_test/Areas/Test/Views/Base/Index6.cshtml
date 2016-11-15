@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "组件";
+    ViewBag.Title = "组件1";
     Layout = "~/Areas/Test/Views/Shared/_LayoutVueMain.cshtml";
 }
 
@@ -47,11 +47,17 @@
         <button-counter v-on:increment="incrementTotal"></button-counter>
         <button-counter v-on:increment="incrementTotal"></button-counter>
 
+        <h4>使用自定义事件的表单输入组件</h4>
+        <input v-model="something" v-on:input="updateValue($event.target.value)" />
+    </div>
+    <br />
+
+    <div id="example4">
+        <currency-input></currency-input>
     </div>
 
 </div>
 
-<script src="~/Scripts/vue/2.x/vue.js"></script>
 <script>
     "use strict"
     ; (function () {
@@ -137,22 +143,55 @@
                 }
             }
         });
-        
+
         let vm4 = new Vue({
             el: '#example3',
             data: {
-                total: 0
+                total: 0,
+                something: ''
             },
             methods: {
                 incrementTotal: function () {
                     this.total += 1;
+                },
+                updateValue: function (value) {
+                    let formattedValue = value
+                        .trim()
+                        .slice(0, value.indexOf('.') + 3);
+
+                    console.log(formattedValue);
                 }
             }
         });
 
+        Vue.component('currency-input', {
+            template: '\
+                <span>\
+                $\
+                <input \
+                ref="input"\
+                v-bind:value="value"\
+                v-on:input="updateValue($event.target.value)"\
+                >\
+                </span>\
+            ',
+            props: ['value'],
+            methods: {
+                updateValue: function (value) {
+                    var formattedValue = value
+                        .trim()
+                        .slice(0, value.indexOf('.') + 3);
+                    if (formattedValue !== value) {
+                        this.$refs.input.value = formattedValue;
+                    }
+                    this.$emit("input", Number(formattedValue));
+                }
+            }
+        });
 
+        let vm5 = new Vue({
+            el: '#example4'
+        });
     })();
-
-
 
 </script>
