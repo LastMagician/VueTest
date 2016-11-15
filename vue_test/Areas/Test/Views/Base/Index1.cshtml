@@ -1,0 +1,151 @@
+﻿@{
+    Layout = "~/Areas/Test/Views/Shared/_LayoutVueMain.cshtml";
+    ViewBag.Title = "起步";
+}
+
+<div id="app">
+    <img src="~/Areas/Test/Resource/Images/circleloadinganimation.gif" style="width:100px;" />
+
+    <div v-if="showInit">
+        <h2>起步</h2>
+        <p>{{message}}</p>
+        <h3>Hello, world</h3>
+        <input v-model="message" />
+
+        <h3>渲染列表</h3>
+        <ul>
+            <li v-for="todo in todos">
+                {{todo.text}}
+            </li>
+        </ul>
+
+        <h3>处理用户输入</h3>
+        <button v-on:click="reverseMessage">Reverse Message</button>
+
+        <h3>综合</h3>
+        <input v-model="newTodo" v-on:keyup.enter="addTodo" />
+        <ul>
+            <li v-for="todo in todos">
+                <span>{{todo.text}}</span>
+                <button v-on:click="removeTodo($index)">X</button>
+            </li>
+        </ul>
+    </div>
+
+    <h3></h3>
+    <p v-if="greeting">Hello!</p>
+
+</div>
+
+<h2>实例</h2>
+<div id="example">
+    <div>"可变的数值："{{a}}</div>
+
+    <div v-once>"不可变的数值："{{a}}</div>
+
+    <div>"原始的html："<div v-html="htmlCode"></div></div>
+    <div>过滤器: {{ letter | capitalize }}</div>
+
+    <div>"全功能表达式:"{{letter.split('').reverse().join('')}}</div>
+    <!-- 完整语法 -->
+    <a v-bind:href="link">this is a link</a><br />
+    <!-- 缩写 -->
+    <a href="link">this is a link</a><br />
+    <button v-on:click="test">click me</button>
+    <!--缩写，不支持@符号-->
+    @*<button @click="test">click me</button>*@
+</div>
+
+<div></div>
+
+<script src="~/Scripts/vue/2.x/vue.js"></script>
+<script>
+    "use strict"
+
+    ; (function () {
+        var v = new Vue({
+            el: "#app",
+            data: {
+                message: "Hello, my world",
+                newTodo: '',
+                greeting: true,
+                showImg: true,
+                showInit: false,
+                todos: [
+                    { text: "AAA" },
+                    { text: "BBB" },
+                    { text: "CCC" }
+                ]
+            },
+            methods: {
+                reverseMessage: function () {
+                    this.message = this.message.split('').reverse().join('')
+                },
+                addTodo: function () {
+                    var text = this.newTodo.trim();
+                    if (text) {
+                        this.todos.push({ text: text });
+                        this.newTodo = '';
+                    }
+                },
+                removeTodo: function (index) {
+                    this.todos.splice(index, 1);
+                }
+            },
+            init: function () {
+                console.log("init");
+            },
+            created: function () {
+                console.log('create');
+            },
+            beforeCompile: function () {
+                console.log("before compile");
+            },
+            compiled: function () {
+                console.log("compiled");
+            },
+            ready: function () {
+                console.log("ready");
+                this.showImg = false;
+                this.showInit = true;
+            },
+            beforeDestroy: function () {
+                alert("before destroy");
+            },
+            destroyed: function () {
+                alert("destroyed");
+            }
+
+        });
+
+    })()
+
+    ; (function () {
+
+        var data = {
+            a: 1,
+            letter: 'abc',
+            htmlCode: '<div style="color: red;">原始html语法测试</div>',
+            link: 'http://cn.bing.com'
+        };
+        var vm = new Vue({
+            el: "#example",
+            data: data,
+            methods: {
+                test: function () {
+                    alert('66');
+                }
+            }
+        });
+
+        console.log(vm.$data === data);
+        console.log(vm.$el === document.getElementById('example'));
+
+        vm.$watch('a', function (newVal, oldVal) {
+            console.log('值已经改变:' + oldVal + " to " + newVal);
+        })
+    })()
+
+
+</script>
+

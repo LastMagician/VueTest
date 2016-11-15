@@ -1,0 +1,126 @@
+﻿@{
+    Layout = "~/Areas/Test/Views/Shared/_LayoutVueMain.cshtml";
+    ViewBag.Title = "列表渲染";
+}
+
+<div>
+    <div id="example">
+        <h3>列表渲染</h3>
+        <ul v-for="(item, index) of items">
+            <li>{{parentMessage}}-{{index}}-{{item.message}}</li>
+        </ul>
+
+        <ul>
+            <template v-for="item of items">
+                <li>{{item.message}}</li>
+                <li class="adddivl"></li>
+            </template>
+        </ul>
+
+        整数迭代
+        <div>
+            <span v-for="n of 10">{{n}}</span>
+        </div>
+    </div>
+
+    <div id="example1">
+        <h3>todo list</h3>
+        <input v-model="newTodoText"
+               v-on:keyup.enter="addNewTodo"
+               placeholder="Add a todo" />
+        <ul>
+            <li is="todo-item"
+                v-for="(todo, index) of todos"
+                v-bind:title="todo"
+                v-on:remove="todos.splice(index, 1)"></li>
+        </ul>
+    </div>
+
+    <div id="example2">
+        <h3>过滤2的偶数</h3>
+        <ul>
+            <li v-for="n of even(numbers)">{{n}}</li>
+        </ul>
+        <h3>过滤奇数</h3>
+        <ul>
+            <li v-for="n of oddNumber">{{n}}</li>
+        </ul>
+    </div>
+</div>
+<script src="~/Scripts/vue/2.x/vue.js"></script>
+<script>
+    "use strict"
+    ; (function () {
+        var data = {
+            ok: true,
+            parentMessage: 'Parent',
+            items: [
+              { message: 'Foo' },
+              { message: 'Bar' }
+            ]
+        }
+
+        var vm = new Vue({
+            el: "#example",
+            data: data
+        })
+    })();
+
+    //todo list
+    ; (function () {
+        Vue.component("todo-item", {
+            template: '\
+                    <li>\
+                        {{ title }}\
+                        <button v-on:click="$emit(\'remove\')">X</button>\
+                    </li>\
+                    ',
+            props: ['title']
+        });
+
+        new Vue({
+            el: '#example1',
+            data: {
+                newTodoText: '',
+                todos: [
+                    'Do the dishes',
+                    'Take out the trash',
+                    'Mow the larn'
+                ]
+            },
+            methods: {
+                addNewTodo: function () {
+                    this.todos.push(this.newTodoText);
+                    this.newTodoText = '';
+                }
+            }
+        })
+
+    })();
+
+    //数组—过滤排序
+    ; (function () {
+        let vm = new Vue({
+            el: '#example2',
+            data: {
+                numbers: [1, 2, 3, 4, 5, 6]
+            },
+            methods: {
+                even: function (numbers) {
+                    return numbers.filter(function (number) {
+                        return number % 2 === 0;
+                    });
+                }
+            },
+            computed: {
+                oddNumber: function () {
+                    return this.numbers.filter(function (number) {
+                        return number % 2 !== 0;
+                    })
+                }
+            }
+        })
+    })();
+
+</script>
+

@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "组件";
+    Layout = "~/Areas/Test/Views/Shared/_LayoutVueMain.cshtml";
+}
+
+<div>
+    <div id="example">
+        <h3>注册组件</h3>
+        <my-component></my-component>
+
+        <h3>局部注册</h3>
+        <my-component1></my-component1>
+
+        <h3>is属性</h3>
+        <table>
+            <tr is="my-component1"></tr>
+        </table>
+    </div>
+
+    <h3>组件里data的使用</h3>
+    <div id="example1">
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+    </div>
+
+    <h3>props</h3>
+    <div id="example2">
+        <h5>静态</h5>
+        <child msg="hello"></child>
+
+        <h5>动态data</h5>
+        <child v-bind:msg="msg"></child>
+        <child msg="msg"></child>
+        <br />
+
+        <h3>string and number</h3>
+        <h4>string</h4>
+        <comp num="1" msg="abc" prop-a="11"></comp>
+        <h4>number</h4>
+        <comp num="1" msg="abc" prop-a="12"></comp>
+    </div>
+
+    <h3>自定义事件</h3>
+    <div id="example3">
+        <p>{{total}}</p>
+        <button-counter v-on:increment="incrementTotal"></button-counter>
+        <button-counter v-on:increment="incrementTotal"></button-counter>
+
+    </div>
+
+</div>
+
+<script src="~/Scripts/vue/2.x/vue.js"></script>
+<script>
+    "use strict"
+    ; (function () {
+
+        //全局注册
+        Vue.component('my-component', {
+            template: '<div>A custom component</div>'
+        });
+        //局部注册组件
+        let Child = {
+            template: '<div>A custom component!</div>'
+        }
+
+        let vm1 = new Vue({
+            el: '#example',
+            components: {
+                'my-component1': Child
+            }
+        });
+
+        //组件里data的使用
+        let data = { counter: 0 },
+            templates = '<button v-on:click="counter += 1">{{counter}}</button>';
+
+        Vue.component('simple-counter', {
+            data: function () {
+                return data;
+            },
+            template: templates
+        });
+
+        let vm2 = new Vue({
+            el: '#example1'
+        });
+    })();
+
+    ; (function () {
+        //props
+        let data = { msg: 'hello' };
+
+        Vue.component('child', {
+            props: ['msg'],
+            template: '<span>{{msg}}</span>'
+        });
+
+        Vue.component('comp', {
+            props: {
+                'num': [Number, String],
+                'msg': String,
+                'propA': {
+                    required: true,
+                    validator: function (value) {
+                        return value > 10
+                    }
+                }
+            },
+            data: function () {
+                return { counter: this.num + 1 }
+            },
+            template: '<span>{{ counter }} - {{normalizedSize}}(toUpperCase) - {{propA}}( value >10 )</span>',
+            computed: {
+                normalizedSize: function () {
+                    return this.msg.trim().toUpperCase();
+                }
+            }
+        });
+
+        let vm3 = new Vue({
+            el: '#example2',
+            data: data
+        });
+
+        //自定义事件
+        Vue.component('button-counter', {
+            data: function () {
+                return { counter: 0 }
+            },
+            template: '<button v-on:click="increment">{{counter}}</button>',
+            methods: {
+                increment: function () {
+                    this.counter += 1;
+                    this.$emit('increment');
+                }
+            }
+        });
+        
+        let vm4 = new Vue({
+            el: '#example3',
+            data: {
+                total: 0
+            },
+            methods: {
+                incrementTotal: function () {
+                    this.total += 1;
+                }
+            }
+        });
+
+
+    })();
+
+
+
+</script>

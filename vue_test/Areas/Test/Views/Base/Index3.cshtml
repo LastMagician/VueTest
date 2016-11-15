@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "~/Areas/Test/Views/Shared/_LayoutVueMain.cshtml";
+    ViewBag.Title = "条件渲染";
+}
+<div class="app">
+    <h3>条件渲染</h3>
+    <template v-if="ok">
+        <div>OkOkOk</div>
+        <div>YesYesYes</div>
+    </template>
+    <template v-else>
+        <div>NoNoNo</div>
+        <div>Dont't</div>
+    </template>
+    <div v-show="ok">v-show体验，不支持template语法</div>
+
+
+</div>
+
+<script src="~/Scripts/vue/2.x/vue.js"></script>
+<script>
+    "use strict"
+    var data = {
+        ok: true
+    }
+
+    var vm = new Vue({
+        el: ".app",
+        data: data
+    })
+
+
+</script>
+
